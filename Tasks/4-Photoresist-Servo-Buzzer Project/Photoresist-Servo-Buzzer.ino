@@ -264,8 +264,33 @@ int durations[] = {
   8, 8, 2
 };
 
+int melody2[] = 
+{
+  NOTE_B4, NOTE_B5, NOTE_FS5, NOTE_DS5,
+  NOTE_B5, NOTE_FS5, NOTE_DS5, NOTE_C5,
+  NOTE_C6, NOTE_G6, NOTE_E6, NOTE_C6, NOTE_G6, NOTE_E6,
+  
+  NOTE_B4, NOTE_B5, NOTE_FS5, NOTE_DS5, NOTE_B5,
+  NOTE_FS5, NOTE_DS5, NOTE_DS5, NOTE_E5, NOTE_F5,
+  NOTE_F5, NOTE_FS5, NOTE_G5, NOTE_G5, NOTE_GS5, NOTE_A5, NOTE_B5
+};
+
+int durations2[] = 
+{
+  16, 16, 16, 16,
+  32, 16, 8, 16,
+  16, 16, 16, 32, 16, 8,
+  
+  16, 16, 16, 16, 32,
+  16, 8, 32, 32, 32,
+  32, 32, 32, 32, 32, 16, 8
+};
+
 int size = sizeof(durations) / sizeof(int);
+int size2 = sizeof(durations2) / sizeof(int);
+
 int note = 0;
+int note2 = 0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -303,7 +328,7 @@ void loop()
   {
     MyServo.write(currentAngle+1);
     State = 1;
-    //Play();
+    PlayPacman();
   }
   else if(valorFotoresistencia2 < valorFotoresistencia1) 
   {
@@ -317,23 +342,38 @@ void loop()
   }
   
   delay(10);
-  
-  //if(State == 2) PlayMario();
 }
 
 void PlayMario() 
 { 
+  if(note >= size) note = 0;
   while(note < size && State == 2) 
   {
-
     int duration = 1000 / durations[note];
     tone(BUZZER_PIN, melody[note], duration);
+    
     int pauseBetweenNotes = duration * 1.30;
     delay(pauseBetweenNotes);
     
     noTone(BUZZER_PIN);
-      note++;
+    note++;
+    State = 0;
+  }
+}
 
+void PlayPacman()
+{
+  if(note2 >= size2) note2 = 0;
+  while(note2 < size2) 
+  {
+    int duration2 = 1000 / durations2[note2];
+    tone(BUZZER_PIN, melody2[note2], duration2);
+
+    int pauseBetweenNotes = duration2 * 1.30;
+    delay(pauseBetweenNotes);
+
+    noTone(BUZZER_PIN);
+    note2++;
     State = 0;
   }
 }
