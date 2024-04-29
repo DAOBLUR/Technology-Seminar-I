@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
+        "endregion",
         "photoresistor"
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "disabled"
 }

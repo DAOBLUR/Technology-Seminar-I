@@ -1,9 +1,15 @@
 #include <Servo.h>
 
-#define BUZZER_PIN 13;
-#pragma region AEA
-int a = 0;
-#pragma endregion
+#define BUZZER_PIN 13
+Servo MyServo;
+
+#define SERVO_PIN 2
+int State = 1;
+
+#define PHOTORESISTOR_1 A0
+#define PHOTORESISTOR_2 A1
+
+#pragma region NOTES
 
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -94,202 +100,131 @@ int a = 0;
 #define NOTE_B7  3951
 #define NOTE_C8  4186
 #define NOTE_CS8 4435
-#define NOTE_D8  4699
+#define NOTE_D8 4699
 #define NOTE_DS8 4978
-#define REST     0
+#define REST 0
 
-int melody[] = 
+#pragma endregion
+
+#pragma region Game of Thrones - GoT
+
+const int GoTMelody[]
 {
-  NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
-  NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
-  NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4,
-  NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4,
-  NOTE_G4, NOTE_C4,
-  NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
-  NOTE_D4,
-  NOTE_F4, NOTE_AS3,
-  NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3,
-  NOTE_DS4, NOTE_D4, NOTE_C4,
-  NOTE_G4, NOTE_C4,
-  NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
-  NOTE_D4,
-  NOTE_F4, NOTE_AS3,
-  NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3,
-  NOTE_DS4, NOTE_D4, NOTE_C4,
-  NOTE_G4, NOTE_C4,
-  NOTE_DS4, NOTE_F4, NOTE_G4,  NOTE_C4, NOTE_DS4, NOTE_F4,
-  NOTE_D4,
-  NOTE_F4, NOTE_AS3,
-  NOTE_D4, NOTE_DS4, NOTE_D4, NOTE_AS3,
-  NOTE_C4,
-  NOTE_C5,
-  NOTE_AS4,
-  NOTE_C4,
-  NOTE_G4,
-  NOTE_DS4,
-  NOTE_DS4, NOTE_F4,
-  NOTE_G4,
-  NOTE_C5,
-  NOTE_AS4,
-  NOTE_C4,
-  NOTE_G4,
-  NOTE_DS4,
-  NOTE_DS4, NOTE_D4,
-  NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4,
-  NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4,
-  REST, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5,
-  NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5
+  NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, 
+  NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4,  NOTE_E4, NOTE_F4, 
+  NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, 
+  NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+  NOTE_D4, NOTE_F4, NOTE_AS3, NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3, NOTE_DS4,  NOTE_D4, NOTE_C4, 
+  NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_D4, NOTE_F4, 
+  NOTE_AS3, NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3, NOTE_DS4, NOTE_D4, NOTE_C4, NOTE_G4, NOTE_C4,
+  NOTE_DS4, NOTE_F4, NOTE_G4,  NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_AS3, NOTE_D4, 
+  NOTE_DS4, NOTE_D4, NOTE_AS3, NOTE_C4, NOTE_C5, NOTE_AS4, NOTE_C4, NOTE_G4, NOTE_DS4, NOTE_DS4, 
+  NOTE_F4, NOTE_G4, NOTE_C5, NOTE_AS4, NOTE_C4, NOTE_G4, NOTE_DS4, NOTE_DS4, NOTE_D4, NOTE_C5, 
+  NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, 
+  NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, REST, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, 
+  NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5
 };
 
-int durations[] = 
+const int GotDurations[] = 
 {
-  8, 8, 16, 16, 8, 8, 16, 16,
-  8, 8, 16, 16, 8, 8, 16, 16,
-  8, 8, 16, 16, 8, 8, 16, 16,
-  8, 8, 16, 16, 8, 8, 16, 16,
-  4, 4,
-  16, 16, 4, 4, 16, 16,
-  1,
-  4, 4,
-  16, 16, 4, 4,
-  16, 16, 1,
-  4, 4,
-  16, 16, 4, 4, 16, 16,
-  1,
-  4, 4,
-  16, 16, 4, 4,
-  16, 16, 1,
-  4, 4,
-  16, 16, 4, 4, 16, 16,
-  2,
-  4, 4,
-  8, 8, 8, 8,
-  1,
-  2,
-  2,
-  2,
-  2,
-  2,
-  4, 4,
-  1,
-  2,
-  2,
-  2,
-  2,
-  2,
-  4, 4,
-  8, 8, 16, 16, 8, 8, 16, 16,
-  8, 8, 16, 16, 8, 8, 16, 16,
-  4, 16, 16, 8, 8, 16, 16,
-  8, 16, 16, 16, 8, 8, 16, 16
+  8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 
+  8, 8, 16, 16, 4, 4, 16, 16, 4, 4, 16, 16, 1, 4, 4, 16, 16, 4, 4, 16, 16, 1, 4, 4, 16, 16, 4, 4, 16, 
+  16, 1, 4, 4, 16, 16, 4, 4, 16, 16, 1, 4, 4, 16, 16, 4, 4, 16, 16, 2, 4, 4, 8, 8, 8, 8, 1, 2, 2, 2, 
+  2, 2, 4, 4, 1, 2, 2, 2, 2, 2, 4, 4, 8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 8, 8, 16, 16, 4, 16, 
+  16, 8, 8, 16, 16, 8, 16, 16, 16, 8, 8, 16, 16
 };
 
-int Melody2[] = 
+#define GoTSize sizeof(GotDurations)/sizeof(int)
+int goTCurrentNote = 0;
+
+#pragma endregion
+
+#pragma region Pirates of the Caribbean - PotC
+
+const int PotCMelody[] = 
 {
-  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
-  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
-  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
-  NOTE_A4, NOTE_G4, NOTE_A4, REST,
-  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
-  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
-  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
-  NOTE_A4, NOTE_G4, NOTE_A4, REST,
-  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
-  NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, REST,
-  NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, REST,
-  NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, REST,
-  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
-  NOTE_D5, NOTE_E5, NOTE_A4, REST,
-  NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, REST,
-  NOTE_C5, NOTE_A4, NOTE_B4, REST,
-  NOTE_A4, NOTE_A4,
-  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
-  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
-  NOTE_A4, NOTE_G4, NOTE_A4, REST,
-  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
-  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
-  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
-  NOTE_A4, NOTE_G4, NOTE_A4, REST,
-  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
-  NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, REST,
-  NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, REST,
-  NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, REST,
-  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
-  NOTE_D5, NOTE_E5, NOTE_A4, REST,
-  NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, REST,
-  NOTE_C5, NOTE_A4, NOTE_B4, REST,
-  NOTE_E5, REST, REST, NOTE_F5, REST, REST,
-  NOTE_E5, NOTE_E5, REST, NOTE_G5, REST, NOTE_E5, NOTE_D5, REST, REST,
-  NOTE_D5, REST, REST, NOTE_C5, REST, REST,
-  NOTE_B4, NOTE_C5, REST, NOTE_B4, REST, NOTE_A4,
-  NOTE_E5, REST, REST, NOTE_F5, REST, REST,
-  NOTE_E5, NOTE_E5, REST, NOTE_G5, REST, NOTE_E5, NOTE_D5, REST, REST,
-  NOTE_D5, REST, REST, NOTE_C5, REST, REST,
-  NOTE_B4, NOTE_C5, REST, NOTE_B4, REST, NOTE_A4
+  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST, NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST, NOTE_C5, 
+  NOTE_D5, NOTE_B4, NOTE_B4, REST, NOTE_A4, NOTE_G4, NOTE_A4, REST, NOTE_E4, NOTE_G4, NOTE_A4, 
+  NOTE_A4, REST, NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 
+  REST, NOTE_A4, NOTE_G4, NOTE_A4, REST, NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST, NOTE_A4, 
+  NOTE_C5, NOTE_D5, NOTE_D5, REST, NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, REST, NOTE_E5, NOTE_D5, 
+  NOTE_E5, NOTE_A4, REST, NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST, NOTE_D5, NOTE_E5, NOTE_A4, 
+  REST, NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, REST, NOTE_C5, NOTE_A4, NOTE_B4, REST, NOTE_A4, 
+  NOTE_A4, NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
+  NOTE_A4, NOTE_G4, NOTE_A4, REST, NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST, NOTE_A4, NOTE_B4, 
+  NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST, NOTE_A4, NOTE_G4, NOTE_A4,
+  REST, NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST, NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, REST, 
+  NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, REST, NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, REST, NOTE_A4, 
+  NOTE_B4, NOTE_C5, NOTE_C5, REST, NOTE_D5, NOTE_E5, NOTE_A4, REST, NOTE_A4, NOTE_C5, NOTE_B4, 
+  NOTE_B4, REST, NOTE_C5, NOTE_A4, NOTE_B4, REST, NOTE_E5, REST, REST, NOTE_F5, REST, REST,
+  NOTE_E5, NOTE_E5, REST, NOTE_G5, REST, NOTE_E5, NOTE_D5, REST, REST, NOTE_D5, REST, REST, 
+  NOTE_C5, REST, REST, NOTE_B4, NOTE_C5, REST, NOTE_B4, REST, NOTE_A4, NOTE_E5, REST, REST, 
+  NOTE_F5, REST, REST, NOTE_E5, NOTE_E5, REST, NOTE_G5, REST, NOTE_E5, NOTE_D5, REST, REST, 
+  NOTE_D5, REST, REST, NOTE_C5, REST, REST, NOTE_B4, NOTE_C5, REST, NOTE_B4, REST, NOTE_A4
 };
 
-int durations2[] = 
+const int PotCDurations[] = 
 {
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  4, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 4,
-  4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  4, 8, 4, 8,
-  8, 8, 4, 8, 8,
-  8, 8, 4, 4,
-  4, 8, 4, 4, 8, 4,
-  8, 8, 8, 8, 8, 8, 8, 8, 4,
-  4, 8, 4, 4, 8, 4,
-  8, 8, 8, 8, 8, 2,
-  4, 8, 4, 4, 8, 4,
-  8, 8, 8, 8, 8, 8, 8, 8, 4,
-  4, 8, 4, 4, 8, 4,
-  8, 8, 8, 8, 8, 2
+  8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 
+  8, 8, 8, 4, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 4, 8, 8, 8, 4, 8, 8, 4, 8, 4,
+  8, 8, 8, 4, 8, 8, 8, 8, 4, 4, 4, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 4, 8, 8, 8, 8, 
+  4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 4, 8, 8, 
+  8, 4, 8, 8, 4, 8, 4, 8, 8, 8, 4, 8, 8, 8, 8, 4, 4, 4, 8, 4, 4, 8, 4, 8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 
+  8, 4, 4, 8, 4, 8, 8, 8, 8, 8, 2, 4, 8, 4, 4, 8, 4, 8, 8, 8, 8, 8, 8, 8, 8, 4, 4, 8, 4, 4, 8, 4, 8, 
+  8, 8, 8, 8, 2
 };
 
-int size = sizeof(durations) / sizeof(int);
-int size2 = sizeof(durations2) / sizeof(int);
+#define PotCSize sizeof(PotCDurations)/sizeof(int)
+int potCCurrentNote = 0;
 
-int note = 0;
-int note2 = 0;
+#pragma endregion
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+void Play()
+{
+  if(State == 1)
+  {
+    if(goTCurrentNote >= GoTSize) goTCurrentNote = 0;
 
-Servo MyServo;
-#define SERVO_PIN 2
-int State = 1;
+    while(goTCurrentNote < GoTSize && State == 1) 
+    {
+      int duration = 1000/GotDurations[goTCurrentNote];
+      tone(BUZZER_PIN, GoTMelody[goTCurrentNote], duration);
 
-#define PHOTORESISTOR_1 A0
-#define PHOTORESISTOR_2 A1
+      int pauseBetweenNotes = duration * 1.30;
+      delay(pauseBetweenNotes);
+
+      noTone(BUZZER_PIN);
+      goTCurrentNote++;
+      State = 0;
+    }
+  }
+  else if (State == 2)
+  {
+    if(potCCurrentNote >= PotCSize) potCCurrentNote = 0;
+
+    while(potCCurrentNote < PotCSize && State == 2) 
+    {
+      int duration = 1000 / PotCDurations[potCCurrentNote];
+      tone(BUZZER_PIN, PotCMelody[potCCurrentNote], duration);
+
+      int pauseBetweenNotes = duration * 1.30;
+      delay(pauseBetweenNotes);
+
+      noTone(BUZZER_PIN);
+      potCCurrentNote++;
+      State = 0;
+    }
+  }
+}
+
+void GetSpeed(int resistanceValue)
+{
+  if(resistanceValue)
+}
 
 void setup()
 {
-  //Serial.begin(9600);
+  Serial.begin(9600);
   pinMode(BUZZER_PIN, OUTPUT);
   
   MyServo.attach(SERVO_PIN);
@@ -299,74 +234,41 @@ void setup()
 void loop()
 {
   int currentAngle = MyServo.read();
-  //Serial.print("Current Angle: ");
-  //Serial.println(currentAngle);
-  
+  /*
+  Serial.print("Current Angle: ");
+  Serial.println(currentAngle);
+  */
   int photoresistor1Value = analogRead(PHOTORESISTOR_1);
   int photoresistor2Value = analogRead(PHOTORESISTOR_2);
   
-  //Serial.print("LDR 01: ");
-  //Serial.print(photoresistor1Value);
-  //Serial.print(" - LDR 02: ");
-  //Serial.println(photoresistor2Value);
-  
+  Serial.print("LDR 01: ");
+  Serial.print(photoresistor1Value);
+  Serial.print(" - LDR 02: ");
+  Serial.println(photoresistor2Value);
+
+  // Error margin = 5
   if(photoresistor1Value > photoresistor2Value + 5 ) 
   {
-    MyServo.write(currentAngle+1);
+    MyServo.write(currentAngle + (700/photoresistor1Value));
+    Serial.println(photoresistor1Value/100);
     State = 1;
-    PlayPacman();
   }
   else if(photoresistor2Value > photoresistor1Value + 5) 
   {
-    MyServo.write(currentAngle-1);
+    MyServo.write(currentAngle - (700/photoresistor2Value));
+    Serial.println(photoresistor2Value/100);
     State = 2;
-    PlayMario();
   }
   else
   {
     State = 0;
-    if(currentAngle > 90) MyServo.write(currentAngle-1);
-    else if(currentAngle < 90) MyServo.write(currentAngle+1);
   }
-  
+
+  Play();
   delay(10);
 
   if(currentAngle == 0 || currentAngle == 180)
   {
     MyServo.write(90);
-  }
-}
-
-void PlayMario() 
-{ 
-  if(note >= size) note = 0;
-  while(note < size && State == 2) 
-  {
-    int duration = 1000 / durations[note];
-    tone(BUZZER_PIN, melody[note], duration);
-
-    int pauseBetweenNotes = duration * 1.30;
-    delay(pauseBetweenNotes);
-    
-    noTone(BUZZER_PIN);
-    note++;
-    State = 0;
-  }
-}
-
-void PlayPacman()
-{
-  if(note2 >= size2) note2 = 0;
-  while(note2 < size2 && State == 1) 
-  {
-    int duration2 = 1000 / durations2[note2];
-    tone(BUZZER_PIN, melody2[note2], duration2);
-
-    int pauseBetweenNotes = duration2 * 1.30;
-    delay(pauseBetweenNotes);
-
-    noTone(BUZZER_PIN);
-    note2++;
-    State = 0;
   }
 }
