@@ -227,7 +227,7 @@ double GetAngleIncrement(int x)
 
 void setup()
 {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   pinMode(BUZZER_PIN, OUTPUT);
   
   MyServo.attach(SERVO_PIN);
