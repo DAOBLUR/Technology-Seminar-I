@@ -204,7 +204,7 @@ void Play()
 
     while(potCCurrentNote < PotCSize && State == 2) 
     {
-      int duration = 1000 / PotCDurations[potCCurrentNote];
+      int duration = 1000/PotCDurations[potCCurrentNote];
       tone(BUZZER_PIN, PotCMelody[potCCurrentNote], duration);
 
       int pauseBetweenNotes = duration * 1.30;
@@ -217,9 +217,12 @@ void Play()
   }
 }
 
-void GetSpeed(int resistanceValue)
+double GetAngleIncrement(int x) 
 {
-  if(resistanceValue)
+  if (x < 100) x = 100;
+  if (x > 800) x = 800;
+
+  return 8 - (x-100) * (8-1) / (800-100);
 }
 
 void setup()
@@ -240,23 +243,21 @@ void loop()
   */
   int photoresistor1Value = analogRead(PHOTORESISTOR_1);
   int photoresistor2Value = analogRead(PHOTORESISTOR_2);
-  
+  /*
   Serial.print("LDR 01: ");
   Serial.print(photoresistor1Value);
   Serial.print(" - LDR 02: ");
   Serial.println(photoresistor2Value);
-
+  */
   // Error margin = 5
   if(photoresistor1Value > photoresistor2Value + 5 ) 
   {
-    MyServo.write(currentAngle + (700/photoresistor1Value));
-    Serial.println(photoresistor1Value/100);
+    MyServo.write(currentAngle + GetAngleIncrement(photoresistor2Value));
     State = 1;
   }
   else if(photoresistor2Value > photoresistor1Value + 5) 
   {
-    MyServo.write(currentAngle - (700/photoresistor2Value));
-    Serial.println(photoresistor2Value/100);
+    MyServo.write(currentAngle - GetAngleIncrement(photoresistor1Value));
     State = 2;
   }
   else
@@ -265,6 +266,7 @@ void loop()
   }
 
   Play();
+
   delay(10);
 
   if(currentAngle == 0 || currentAngle == 180)
