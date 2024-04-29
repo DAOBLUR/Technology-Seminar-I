@@ -339,9 +339,16 @@ void loop()
   else
   {
     State = 1;
+    if(currentAngle > 90) MyServo.write(currentAngle-1);
+    else if(currentAngle < 90) MyServo.write(currentAngle+1);
   }
   
   delay(10);
+
+  if(currentAngle == 0 || currentAngle == 180)
+  {
+    MyServo.write(90);
+  }
 }
 
 void PlayMario() 
@@ -351,7 +358,7 @@ void PlayMario()
   {
     int duration = 1000 / durations[note];
     tone(BUZZER_PIN, melody[note], duration);
-    
+
     int pauseBetweenNotes = duration * 1.30;
     delay(pauseBetweenNotes);
     
