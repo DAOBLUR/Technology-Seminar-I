@@ -1,4 +1,4 @@
-  #include <Servo.h>
+#include <Servo.h>
 
 #define  a3f    208     // 208 Hz
 #define b3f    233     // 233 Hz
@@ -25,35 +25,23 @@
 int piezo = 13; // Connect your piezo buzzer to this pin or changeit to match your circuit!
 int led = LED_BUILTIN; 
 
-volatile int beatlength
-  = 100; // determines tempo
+volatile int beatlength = 100; // determines tempo
 float beatseparationconstant = 0.3;
 
 int threshold;
 
-int
-  a; // part index
-int b; // song index
-int c; // lyric index
+int a;
+int b;
+int c;
 
 boolean flag;
 
-// Parts 1 and 2 (Intro)
+int song1_intro_melody[] = { c5s, e5f, e5f, f5, a5f, f5s, f5, e5f, c5s, e5f, rest, a4f, a4f };
 
-int song1_intro_melody[] =
-{c5s,
-  e5f, e5f, f5, a5f, f5s, f5, e5f, c5s, e5f, rest, a4f, a4f};
+int song1_intro_rhythmn[] = { 6, 10, 6, 6, 1, 1, 1, 1, 6, 10, 4, 2, 10 };
 
-int song1_intro_rhythmn[]
-  =
-{6, 10, 6, 6, 1, 1, 1, 1, 6, 10, 4, 2, 10};
-
-// Parts 3 or 5 (Verse 1)
-
-int
-  song1_verse1_melody[] =
+int song1_verse1_melody[] =
 { rest, c4s, c4s, c4s, c4s, e4f, rest, c4, b3f, a3f,
-
   rest, b3f, b3f, c4, c4s, a3f, a4f, a4f, e4f,
   rest, b3f, b3f, c4, c4s, b3f,
   c4s, e4f, rest, c4, b3f, b3f, a3f,
@@ -76,17 +64,6 @@ int song1_verse1_rhythmn[] =
   2, 1, 1, 1, 3, 1, 1, 1, 3
 };
 
-const char* lyrics_verse1[]
-  =
-{ "We're ", "no ", "strangers ", "", "to ", "love ", "", "\
-\
-",
-
-
-};
-
-//Parts 4 or 6 (Chorus)
-
 int song1_chorus_melody[] =
 { b4f, b4f, a4f, a4f,
 
@@ -102,12 +79,10 @@ int song1_chorus_melody[] =
   c5s, e5f, c5, b4f, a4f, rest, a4f, e5f, c5s, rest
 };
 
-int song1_chorus_rhythmn[]
-  =
+int song1_chorus_rhythmn[] =
 { 1, 1, 1, 1,
   3, 3, 6, 1, 1, 1, 1, 3, 3, 3, 1, 2,
   1, 1, 1, 1,
-
   3, 3, 3, 1, 2, 2, 2, 4, 8,
   1, 1, 1, 1,
   3, 3, 6, 1, 1, 1, 1, 3, 3, 3,
@@ -163,35 +138,20 @@ void loop()
   
   if(valorFotoresistencia1 < valorFotoresistencia2) 
   {
-    //Serial.println(valorFotoresistencia1);
     MyServo.write(currentAngle+1);
-    ServoAngle++;
   }
   else if(valorFotoresistencia2 < valorFotoresistencia1) 
   {
-    //Serial.println(valorFotoresistencia2);
     MyServo.write(currentAngle-1);
-    ServoAngle2--;
   }
   
-  ///
-  
-  //
   delay(10);
-  //angulo = MyServo.read();
-  //Serial.print("Angulo actual del servo: ");
-  //Serial.println(angulo);
-  
   
   if (flag == true) 
   {
-    play();
+    Play();
   }
 }
-
-
-
-
 
 void Play() 
 {
@@ -209,7 +169,7 @@ void Play()
 
     b++;
 
-    if b >= sizeof(song1_intro_melody) / sizeof(int)) 
+    if(b >= sizeof(song1_intro_melody) / sizeof(int)) 
     {
       a++;
       b = 0;
@@ -262,7 +222,7 @@ void Play()
   digitalWrite(led, LOW);
   delay(noteLength * beatseparationconstant);
 
-  if (a == 7) 
+  if(a == 7) 
   {
     a = 1;
   }
