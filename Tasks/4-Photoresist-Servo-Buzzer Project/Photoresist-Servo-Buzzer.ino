@@ -1,122 +1,285 @@
 #include <Servo.h>
 
-#define  a3f    208     // 208 Hz
-#define b3f    233     // 233 Hz
-#define  b3     247     // 247 Hz
-#define  c4     261
-     // 261 Hz MIDDLE C
-#define  c4s    277     // 277 Hz
-#define  e4f    311
-     // 311 Hz    
-#define  f4     349     // 349 Hz 
-#define  a4f    415
-     // 415 Hz  
-#define  b4f    466     // 466 Hz 
-#define  b4     493     //493 Hz 
-#define  c5     523     // 523 Hz 
-#define  c5s    554     // 554 Hz
-#define  e5f    622     // 622 Hz  
-#define  f5     698     // 698 Hz 
-#define f5s    740     // 740 Hz
-#define  a5f    831     // 831 Hz 
+int BUZZER_PIN = 13;
 
-#define rest    -1
+#define NOTE_B0  31
+#define NOTE_C1  33
+#define NOTE_CS1 35
+#define NOTE_D1  37
+#define NOTE_DS1 39
+#define NOTE_E1  41
+#define NOTE_F1  44
+#define NOTE_FS1 46
+#define NOTE_G1  49
+#define NOTE_GS1 52
+#define NOTE_A1  55
+#define NOTE_AS1 58
+#define NOTE_B1  62
+#define NOTE_C2  65
+#define NOTE_CS2 69
+#define NOTE_D2  73
+#define NOTE_DS2 78
+#define NOTE_E2  82
+#define NOTE_F2  87
+#define NOTE_FS2 93
+#define NOTE_G2  98
+#define NOTE_GS2 104
+#define NOTE_A2  110
+#define NOTE_AS2 117
+#define NOTE_B2  123
+#define NOTE_C3  131
+#define NOTE_CS3 139
+#define NOTE_DB3 139
+#define NOTE_D3  147
+#define NOTE_DS3 156
+#define NOTE_EB3 156
+#define NOTE_E3  165
+#define NOTE_F3  175
+#define NOTE_FS3 185
+#define NOTE_G3  196
+#define NOTE_GS3 208
+#define NOTE_A3  220
+#define NOTE_AS3 233
+#define NOTE_B3  247
+#define NOTE_C4  262
+#define NOTE_CS4 277
+#define NOTE_D4  294
+#define NOTE_DS4 311
+#define NOTE_E4  330
+#define NOTE_F4  349
+#define NOTE_FS4 370
+#define NOTE_G4  392
+#define NOTE_GS4 415
+#define NOTE_A4  440
+#define NOTE_AS4 466
+#define NOTE_B4  494
+#define NOTE_C5  523
+#define NOTE_CS5 554
+#define NOTE_D5  587
+#define NOTE_DS5 622
+#define NOTE_E5  659
+#define NOTE_F5  698
+#define NOTE_FS5 740
+#define NOTE_G5  784
+#define NOTE_GS5 831
+#define NOTE_A5  880
+#define NOTE_AS5 932
+#define NOTE_B5  988
+#define NOTE_C6  1047
+#define NOTE_CS6 1109
+#define NOTE_D6  1175
+#define NOTE_DS6 1245
+#define NOTE_E6  1319
+#define NOTE_F6  1397
+#define NOTE_FS6 1480
+#define NOTE_G6  1568
+#define NOTE_GS6 1661
+#define NOTE_A6  1760
+#define NOTE_AS6 1865
+#define NOTE_B6  1976
+#define NOTE_C7  2093
+#define NOTE_CS7 2217
+#define NOTE_D7  2349
+#define NOTE_DS7 2489
+#define NOTE_E7  2637
+#define NOTE_F7  2794
+#define NOTE_FS7 2960
+#define NOTE_G7  3136
+#define NOTE_GS7 3322
+#define NOTE_A7  3520
+#define NOTE_AS7 3729
+#define NOTE_B7  3951
+#define NOTE_C8  4186
+#define NOTE_CS8 4435
+#define NOTE_D8  4699
+#define NOTE_DS8 4978
+#define REST     0
 
-int piezo = 13; // Connect your piezo buzzer to this pin or changeit to match your circuit!
-int led = LED_BUILTIN; 
-
-volatile int beatlength = 100; // determines tempo
-float beatseparationconstant = 0.3;
-
-int threshold;
-
-int a;
-int b;
-int c;
-
-boolean flag;
-
-int song1_intro_melody[] = { c5s, e5f, e5f, f5, a5f, f5s, f5, e5f, c5s, e5f, rest, a4f, a4f };
-
-int song1_intro_rhythmn[] = { 6, 10, 6, 6, 1, 1, 1, 1, 6, 10, 4, 2, 10 };
-
-int song1_verse1_melody[] =
-{ rest, c4s, c4s, c4s, c4s, e4f, rest, c4, b3f, a3f,
-  rest, b3f, b3f, c4, c4s, a3f, a4f, a4f, e4f,
-  rest, b3f, b3f, c4, c4s, b3f,
-  c4s, e4f, rest, c4, b3f, b3f, a3f,
-  rest, b3f, b3f, c4, c4s, a3f, a3f, e4f,
-  e4f, e4f, f4, e4f,
-  c4s, e4f, f4, c4s, e4f, e4f, e4f, f4, e4f, a3f,
-  rest,
-  b3f, c4, c4s, a3f, rest, e4f, f4, e4f
+int melody[] = {
+  NOTE_E5, NOTE_E5, REST, NOTE_E5, REST, NOTE_C5, NOTE_E5,
+  NOTE_G5, REST, NOTE_G4, REST, 
+  NOTE_C5, NOTE_G4, REST, NOTE_E4,
+  NOTE_A4, NOTE_B4, NOTE_AS4, NOTE_A4,
+  NOTE_G4, NOTE_E5, NOTE_G5, NOTE_A5, NOTE_F5, NOTE_G5,
+  REST, NOTE_E5,NOTE_C5, NOTE_D5, NOTE_B4,
+  NOTE_C5, NOTE_G4, REST, NOTE_E4,
+  NOTE_A4, NOTE_B4, NOTE_AS4, NOTE_A4,
+  NOTE_G4, NOTE_E5, NOTE_G5, NOTE_A5, NOTE_F5, NOTE_G5,
+  REST, NOTE_E5,NOTE_C5, NOTE_D5, NOTE_B4,
+  
+  REST, NOTE_G5, NOTE_FS5, NOTE_F5, NOTE_DS5, NOTE_E5,
+  REST, NOTE_GS4, NOTE_A4, NOTE_C4, REST, NOTE_A4, NOTE_C5, NOTE_D5,
+  REST, NOTE_DS5, REST, NOTE_D5,
+  NOTE_C5, REST,
+  
+  REST, NOTE_G5, NOTE_FS5, NOTE_F5, NOTE_DS5, NOTE_E5,
+  REST, NOTE_GS4, NOTE_A4, NOTE_C4, REST, NOTE_A4, NOTE_C5, NOTE_D5,
+  REST, NOTE_DS5, REST, NOTE_D5,
+  NOTE_C5, REST,
+  
+  NOTE_C5, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5,
+  NOTE_E5, NOTE_C5, NOTE_A4, NOTE_G4,
+  
+  NOTE_C5, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5, NOTE_E5,
+  REST, 
+  NOTE_C5, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5,
+  NOTE_E5, NOTE_C5, NOTE_A4, NOTE_G4,
+  NOTE_E5, NOTE_E5, REST, NOTE_E5, REST, NOTE_C5, NOTE_E5,
+  NOTE_G5, REST, NOTE_G4, REST, 
+  NOTE_C5, NOTE_G4, REST, NOTE_E4,
+  
+  NOTE_A4, NOTE_B4, NOTE_AS4, NOTE_A4,
+  NOTE_G4, NOTE_E5, NOTE_G5, NOTE_A5, NOTE_F5, NOTE_G5,
+  REST, NOTE_E5, NOTE_C5, NOTE_D5, NOTE_B4,
+  
+  NOTE_C5, NOTE_G4, REST, NOTE_E4,
+  NOTE_A4, NOTE_B4, NOTE_AS4, NOTE_A4,
+  NOTE_G4, NOTE_E5, NOTE_G5, NOTE_A5, NOTE_F5, NOTE_G5,
+  REST, NOTE_E5, NOTE_C5, NOTE_D5, NOTE_B4,
+  
+  NOTE_E5, NOTE_C5, NOTE_G4, REST, NOTE_GS4,
+  NOTE_A4, NOTE_F5, NOTE_F5, NOTE_A4,
+  NOTE_D5, NOTE_A5, NOTE_A5, NOTE_A5, NOTE_G5, NOTE_F5,
+  
+  NOTE_E5, NOTE_C5, NOTE_A4, NOTE_G4,
+  NOTE_E5, NOTE_C5, NOTE_G4, REST, NOTE_GS4,
+  NOTE_A4, NOTE_F5, NOTE_F5, NOTE_A4,
+  NOTE_B4, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_E5, NOTE_D5,
+  NOTE_C5, NOTE_E4, NOTE_E4, NOTE_C4,
+  
+  NOTE_E5, NOTE_C5, NOTE_G4, REST, NOTE_GS4,
+  NOTE_A4, NOTE_F5, NOTE_F5, NOTE_A4,
+  NOTE_D5, NOTE_A5, NOTE_A5, NOTE_A5, NOTE_G5, NOTE_F5,
+  
+  NOTE_E5, NOTE_C5, NOTE_A4, NOTE_G4,
+  NOTE_E5, NOTE_C5, NOTE_G4, REST, NOTE_GS4,
+  NOTE_A4, NOTE_F5, NOTE_F5, NOTE_A4,
+  NOTE_B4, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_E5, NOTE_D5,
+  NOTE_C5, NOTE_E4, NOTE_E4, NOTE_C4,
+  NOTE_C5, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5, NOTE_E5,
+  REST,
+  
+  NOTE_C5, NOTE_C5, NOTE_C5, REST, NOTE_C5, NOTE_D5,
+  NOTE_E5, NOTE_C5, NOTE_A4, NOTE_G4,
+  NOTE_E5, NOTE_E5, REST, NOTE_E5, REST, NOTE_C5, NOTE_E5,
+  NOTE_G5, REST, NOTE_G4, REST, 
+  NOTE_E5, NOTE_C5, NOTE_G4, REST, NOTE_GS4,
+  NOTE_A4, NOTE_F5, NOTE_F5, NOTE_A4,
+  NOTE_D5, NOTE_A5, NOTE_A5, NOTE_A5, NOTE_G5, NOTE_F5,
+  
+  NOTE_E5, NOTE_C5, NOTE_A4, NOTE_G4,
+  NOTE_E5, NOTE_C5, NOTE_G4, REST, NOTE_GS4,
+  NOTE_A4, NOTE_F5, NOTE_F5, NOTE_A4,
+  NOTE_B4, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_E5, NOTE_D5,
+  NOTE_C5, NOTE_E4, NOTE_E4, NOTE_C4,
+  
+  // Game over sound
+  NOTE_C5, NOTE_G4, NOTE_E4,
+  NOTE_A4, NOTE_B4, NOTE_A4, NOTE_GS4, NOTE_AS4, NOTE_GS4,
+  NOTE_G4, NOTE_D4, NOTE_E4
 };
 
-int song1_verse1_rhythmn[] =
-{
-  2, 1, 1, 1, 1, 2, 1, 1, 1, 5,
-  1, 1, 1, 1, 3, 1, 2, 1, 5,
-  1, 1, 1, 1, 1,
-  1, 1, 2, 1, 1, 1, 1, 3,
-  1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 4,
-  5, 1, 1, 1,
-  1, 1, 1, 1, 2, 2,
-  2, 1, 1, 1, 3, 1, 1, 1, 3
+int durations[] = {
+  8, 8, 8, 8, 8, 8, 8,
+  4, 4, 8, 4, 
+  4, 8, 4, 4,
+  4, 4, 8, 4,
+  8, 8, 8, 4, 8, 8,
+  8, 4,8, 8, 4,
+  4, 8, 4, 4,
+  4, 4, 8, 4,
+  8, 8, 8, 4, 8, 8,
+  8, 4,8, 8, 4,
+  
+  
+  4, 8, 8, 8, 4, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  4, 4, 8, 4,
+  2, 2,
+  
+  4, 8, 8, 8, 4, 8,
+  8, 8, 8, 8, 8, 8, 8, 8,
+  4, 4, 8, 4,
+  2, 2,
+  
+  8, 4, 8, 8, 8, 4,
+  8, 4, 8, 2,
+  
+  8, 4, 8, 8, 8, 8, 8,
+  1, 
+  8, 4, 8, 8, 8, 4,
+  8, 4, 8, 2,
+  8, 8, 8, 8, 8, 8, 4,
+  4, 4, 4, 4, 
+  4, 8, 4, 4,
+  
+  4, 4, 8, 4,
+  8, 8, 8, 4, 8, 8,
+  8, 4, 8, 8, 4,
+  
+  4, 8, 4, 4,
+  4, 4, 8, 4,
+  8, 8, 8, 4, 8, 8,
+  8, 4, 8, 8, 4,
+  
+  8, 4, 8, 4, 4,
+  8, 4, 8, 2,
+  8, 8, 8, 8, 8, 8,
+  
+  8, 4, 8, 2,
+  8, 4, 8, 4, 4,
+  8, 4, 8, 2,
+  8, 4, 8, 8, 8, 8,
+  8, 4, 8, 2,
+  
+  8, 4, 8, 4, 4,
+  8, 4, 8, 2,
+  8, 8, 8, 8, 8, 8,
+  
+  8, 4, 8, 2,
+  8, 4, 8, 4, 4,
+  8, 4, 8, 2,
+  8, 4, 8, 8, 8, 8,
+  8, 4, 8, 2,
+  8, 4, 8, 8, 8, 8, 8,
+  1,
+  
+  8, 4, 8, 8, 8, 4,
+  8, 4, 8, 2,
+  8, 8, 8, 8, 8, 8, 4,
+  4, 4, 4, 4, 
+  8, 4, 8, 4, 4,
+  8, 4, 8, 2,
+  8, 8, 8, 8, 8, 8,
+  
+  8, 4, 8, 2,
+  8, 4, 8, 4, 4,
+  8, 4, 8, 2,
+  8, 4, 8, 8, 8, 8,
+  8, 4, 8, 2,
+  
+  //game over sound
+  4, 4, 4,
+  8, 8, 8, 8, 8, 8,
+  8, 8, 2
 };
 
-int song1_chorus_melody[] =
-{ b4f, b4f, a4f, a4f,
+int size = sizeof(durations) / sizeof(int);
+int note = 0;
 
-  f5, f5, e5f, b4f, b4f, a4f, a4f, e5f, e5f, c5s, c5, b4f,
-  c5s, c5s, c5s, c5s,
-
-  c5s, e5f, c5, b4f, a4f, a4f, a4f, e5f, c5s,
-  b4f, b4f, a4f, a4f,
-  f5,
-  f5, e5f, b4f, b4f, a4f, a4f, a5f, c5, c5s, c5, b4f,
-  c5s, c5s, c5s, c5s,
-
-  c5s, e5f, c5, b4f, a4f, rest, a4f, e5f, c5s, rest
-};
-
-int song1_chorus_rhythmn[] =
-{ 1, 1, 1, 1,
-  3, 3, 6, 1, 1, 1, 1, 3, 3, 3, 1, 2,
-  1, 1, 1, 1,
-  3, 3, 3, 1, 2, 2, 2, 4, 8,
-  1, 1, 1, 1,
-  3, 3, 6, 1, 1, 1, 1, 3, 3, 3,
-  1, 2,
-  1, 1, 1, 1,
-  3, 3, 3, 1, 2, 2, 2, 4, 8, 4
-};
-
-const char*
-  lyrics_chorus[] =
-{};
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Servo MyServo;
 int ServoPin = 2;
-int ServoAngle = 0;
-int ServoAngle2 = 180;
-bool isAngle1 = true;
+int State = 1;
 
 #define FOTORRESISTENCIA_1 A0
 #define FOTORRESISTENCIA_2 A1
 
 void setup()
 {
-  pinMode(piezo, OUTPUT);
-  pinMode(led,
-  OUTPUT);
-
-  digitalWrite(led, LOW);
+  pinMode(BUZZER_PIN, OUTPUT);
   Serial.begin(9600);
-  flag = true;
-	
-  a = 4;
-  b = 0;
-  c = 0;
   //
   MyServo.attach(ServoPin);
   MyServo.write(90);
@@ -139,91 +302,38 @@ void loop()
   if(valorFotoresistencia1 < valorFotoresistencia2) 
   {
     MyServo.write(currentAngle+1);
+    State = 1;
+    //Play();
   }
   else if(valorFotoresistencia2 < valorFotoresistencia1) 
   {
     MyServo.write(currentAngle-1);
+    State = 2;
+    PlayMario();
+  }
+  else
+  {
+    State = 1;
   }
   
   delay(10);
   
-  if (flag == true) 
-  {
-    Play();
-  }
+  //if(State == 2) PlayMario();
 }
 
-void Play() 
-{
-  int noteLength;
-  if (a == 1 || a == 2) 
+void PlayMario() 
+{ 
+  while(note < size && State == 2) 
   {
-    // intro
-    noteLength = beatlength * song1_intro_rhythmn[b];
 
-    if (song1_intro_melody[b] > 0) 
-    {
-      digitalWrite(led, HIGH);
-      tone(piezo, song1_intro_melody[b], noteLength);
-    }
+    int duration = 1000 / durations[note];
+    tone(BUZZER_PIN, melody[note], duration);
+    int pauseBetweenNotes = duration * 1.30;
+    delay(pauseBetweenNotes);
+    
+    noTone(BUZZER_PIN);
+      note++;
 
-    b++;
-
-    if(b >= sizeof(song1_intro_melody) / sizeof(int)) 
-    {
-      a++;
-      b = 0;
-      c = 0;
-    }
-  }
-
-  else if (a == 3 || a == 5) 
-  {
-    // verse
-    noteLength = beatlength * 2 * song1_verse1_rhythmn[b];
-
-    if (song1_verse1_melody[b] > 0) 
-    {
-      digitalWrite(led, HIGH);
-      tone(piezo, song1_verse1_melody[b], noteLength);
-      c++;
-    }
-
-    b++;
-    if (b >= sizeof(song1_verse1_melody) / sizeof(int)) 
-    {
-      a++;
-      b = 0;
-      c = 0;
-    }
-  }
-  else if (a == 4 || a == 6) 
-  {
-    // chorus
-    noteLength = beatlength * song1_chorus_rhythmn[b];
-    if(song1_chorus_melody[b] > 0) 
-    {
-      digitalWrite(led, HIGH);
-      tone(piezo, song1_chorus_melody[b], noteLength);
-      c++;
-    }
-
-    b++;
-    if(b >= sizeof(song1_chorus_melody) / sizeof(int)) 
-    {
-      a++;
-      b = 0;
-      c = 0;
-    }
-  }
-  delay(noteLength);
-
-  noTone(piezo);
-  digitalWrite(led, LOW);
-  delay(noteLength * beatseparationconstant);
-
-  if(a == 7) 
-  {
-    a = 1;
+    State = 0;
   }
 }
