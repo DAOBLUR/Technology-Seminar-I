@@ -371,7 +371,7 @@ void PlayMario()
 void PlayPacman()
 {
   if(note2 >= size2) note2 = 0;
-  while(note2 < size2) 
+  while(note2 < size2 && State == 1) 
   {
     int duration2 = 1000 / durations2[note2];
     tone(BUZZER_PIN, melody2[note2], duration2);
