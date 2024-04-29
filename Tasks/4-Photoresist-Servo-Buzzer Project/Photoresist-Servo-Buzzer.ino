@@ -303,9 +303,9 @@ int State = 1;
 
 void setup()
 {
-  pinMode(BUZZER_PIN, OUTPUT);
   Serial.begin(9600);
-  //
+  //pinMode(BUZZER_PIN, OUTPUT);
+  
   MyServo.attach(ServoPin);
   MyServo.write(90);
 }
@@ -313,34 +313,34 @@ void setup()
 void loop()
 {
   int currentAngle = MyServo.read();
-  Serial.print("Current Angle: ");
-  Serial.println(currentAngle);
+  //Serial.print("Current Angle: ");
+  //Serial.println(currentAngle);
   
   int valorFotoresistencia1 = analogRead(FOTORRESISTENCIA_1);
   int valorFotoresistencia2 = analogRead(FOTORRESISTENCIA_2);
   
-  Serial.print("LDR 01: ");
-  Serial.print(valorFotoresistencia1);
-  Serial.print(" - LDR 02: ");
-  Serial.println(valorFotoresistencia2);
+  //Serial.print("LDR 01: ");
+  //Serial.print(valorFotoresistencia1);
+  //Serial.print(" - LDR 02: ");
+  //Serial.println(valorFotoresistencia2);
   
   if(valorFotoresistencia1 < valorFotoresistencia2) 
   {
     MyServo.write(currentAngle+1);
     State = 1;
-    PlayPacman();
+    //PlayPacman();
   }
   else if(valorFotoresistencia2 < valorFotoresistencia1) 
   {
     MyServo.write(currentAngle-1);
     State = 2;
-    PlayMario();
+    //PlayMario();
   }
   else
   {
     State = 1;
-    if(currentAngle > 90) MyServo.write(currentAngle-1);
-    else if(currentAngle < 90) MyServo.write(currentAngle+1);
+    //if(currentAngle > 90) MyServo.write(currentAngle-1);
+    //else if(currentAngle < 90) MyServo.write(currentAngle+1);
   }
   
   delay(10);
