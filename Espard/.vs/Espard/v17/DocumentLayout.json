@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BBB2E923-E916-418E-8609-2092D70C6EF4}|Espard.csproj|e:\\uni\\semester8\\technology seminar i\\espard\\controllers\\proximitysensorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBB2E923-E916-418E-8609-2092D70C6EF4}|Espard.csproj|solutionrelative:controllers\\proximitysensorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BBB2E923-E916-418E-8609-2092D70C6EF4}|Espard.csproj|e:\\uni\\semester8\\technology seminar i\\espard\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBB2E923-E916-418E-8609-2092D70C6EF4}|Espard.csproj|solutionrelative:controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BBB2E923-E916-418E-8609-2092D70C6EF4}|Espard.csproj|e:\\uni\\semester8\\technology seminar i\\espard\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BBB2E923-E916-418E-8609-2092D70C6EF4}|Espard.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "Controllers\\WeatherForecastController.cs",
+              "ToolTip": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "Controllers\\WeatherForecastController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-20T18:50:33.787Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProximitySensorController.cs",
+              "DocumentMoniker": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\Controllers\\ProximitySensorController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProximitySensorController.cs",
+              "ToolTip": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\Controllers\\ProximitySensorController.cs",
+              "RelativeToolTip": "Controllers\\ProximitySensorController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-20T18:50:25.305Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "E:\\UNI\\semester8\\Technology Seminar I\\Espard\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-20T16:59:37.845Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
