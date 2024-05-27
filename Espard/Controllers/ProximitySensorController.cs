@@ -9,28 +9,29 @@ namespace Espard.Controllers
     {
         public static int CurrentDistance { get; set; } = -1;
 
-        [HttpGet]
+        [HttpPost]
         [Route("SetDistance")]
         public async Task<IActionResult> SetDistance(int distance)
         {
             if (distance > 0)
             {
                 CurrentDistance = distance;
+                return Ok("Success");
             }
-
-            return Ok(distance);
+            
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("GetDistance")]
-        public async Task<IActionResult> GetDistance()
+        public IActionResult GetDistance()
         {
             if (CurrentDistance > 0)
             {
                 return Ok($"{CurrentDistance} cm");
             }
 
-            return Ok($"Error");
+            return Ok($"No data");
         }
     }
 }

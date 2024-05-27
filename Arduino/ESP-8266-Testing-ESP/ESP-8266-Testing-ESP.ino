@@ -4,21 +4,17 @@
 
 #include <SoftwareSerial.h>
 
-int counter = 0;
+int counter = 200;
 String str;
-SoftwareSerial espSerial(4, 0);
+SoftwareSerial EspSerial(4, 0); // D2 and D3
 
 const char* ssid = "Familia PIYU";
 const char* password = "958919934";
 
+const String BaseApiUrl = "https://sjh6zkwc-7286.brs.devtunnels.ms/api/ProximitySensor/";
 
-String url = "https://sjh6zkwc-7286.brs.devtunnels.ms/api/ProximitySensor/SetDistance?distance=";
-
-void setup() 
+void WifiClientInitialize()
 {
-  Serial.begin(9600);
-  espSerial.begin(9600);
-
   WiFi.begin(ssid, password);
   Serial.println("");
   Serial.print("Connecting");
@@ -36,13 +32,19 @@ void setup()
   Serial.println(WiFi.localIP());
 }
 
+void setup() 
+{
+  Serial.begin(9600);
+  EspSerial.begin(9600);
+  WifiClientInitialize();
+}
 
 void loop() 
 {
   ReceiveAndSend();
 }
 
-void WeatherForecast(String distance)
+void SendDitance(String distance)
 {
   if (WiFi.status() == WL_CONNECTED) 
   {
@@ -50,15 +52,17 @@ void WeatherForecast(String distance)
     client.setInsecure();
     
     HTTPClient https;
-    String data = distance;
-    String fullUrl = url + data;
+    String data = "SetDistance?distance=" + String(distance.toInt());
+    String fullUrl = BaseApiUrl + data;
 
     Serial.println("Requesting " + fullUrl);
 
     if (https.begin(client, fullUrl)) 
     {
-      int httpCode = https.GET();
-      Serial.println("== Response code: " + String(httpCode));
+      https.addHeader("Content-Type", "application/x-www-form-urlencoded");
+      
+      int httpCode = https.POST("");
+      Serial.println("Response code: " + String(httpCode));
       if (httpCode > 0) 
       {
         Serial.println(https.getString());
@@ -67,31 +71,40 @@ void WeatherForecast(String distance)
     } 
     else 
     {
-      Serial.printf("[HTTPS] Unable to connect\n");
+      Serial.println("[HTTPS] Unable to connect\n");
     }
   }
 }
 
 void ReceiveAndSend() 
 {
-  str = espSerial.readString();
-
-  Serial.print("espSerial.available = ");
-  Serial.print(espSerial.available());
-  Serial.print(" - espSerial.readString = ");
-  Serial.println(str);
-
-  if(espSerial.available()) 
+  if(EspSerial.available() > 0) 
   {
-    str = espSerial.readString();
-    Serial.print("Arduino Message: ");
+    str = EspSerial.readString();
+    Serial.print("Message: ");
     Serial.println(str);
-    Serial.flush();
-
-    WeatherForecast(str);
-
-    espSerial.print("Clean");
+    SendDitance(str);
+    EspSerial.flush();
+    
+    // Send a response
+    EspSerial.println(counter);
+    
+    if(counter < 300) counter++;
+    else counter = 200;
   }
-  espSerial.print("Clean");
-  delay(1025);
 }
+
+/*
+#define LED D1
+void setup() 
+{
+  pinMode(LED, OUTPUT); 
+}
+void loop() 
+{
+  digitalWrite(LED, HIGH);                     
+  delay(1000);            
+  digitalWrite(LED, LOW);
+  delay(1000);
+}
+*/
