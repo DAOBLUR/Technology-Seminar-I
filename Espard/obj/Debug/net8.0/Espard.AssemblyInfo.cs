@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Espard")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af305b5e34c1c3660c40f639197cb730d072f6ee")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb5e7f6b8b8c25606fee82907bd9bfc01bbcd0b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Espard")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Espard")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

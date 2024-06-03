@@ -8,8 +8,13 @@ int counter = 200;
 String str;
 SoftwareSerial EspSerial(4, 0); // D2 and D3
 
+/*
 const char* ssid = "Familia PIYU";
 const char* password = "958919934";
+*/
+
+const char* ssid = "Alumnos";
+const char* password = "";
 
 const String BaseApiUrl = "https://sjh6zkwc-7286.brs.devtunnels.ms/api/ProximitySensor/";
 
